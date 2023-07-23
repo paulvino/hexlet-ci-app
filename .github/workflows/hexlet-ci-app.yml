@@ -4,28 +4,18 @@ on: push
 
 # Пример для проекта на Node.js
 jobs:
-  build: # имя взято для примера
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Клонируем репозиторий
-      - uses: actions/checkout@v3
-      # Устанавливаем Node.js
-      - uses: actions/setup-node@v3
-      # Ставим зависимости
-      - run: npm install
-      # Запускаем линтер
-      - run: npm run lint
-      # Запускаем тесты
-      # у шагов может быть имя, иногда это помогает отладке
-      # имя выводится на Github при просмотре сборки
-      - name: run tests
-        run: npm test # name и run относятся к одной задаче, поэтому дефис ставится только перед name
-  security:
-    runs-on: ubuntu-latest
-    steps:
+      - name: Setup Node.js environment
+      uses: actions/setup-node@master
       - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snuk/actions/node@master
+      - run: npm install
+      - run: npm run lint
+      - name: run tests
+        run: npm test
+      - name: Run Snyk
+        uses: snyk/actions/node@master
         env:
-          SNYK_TOKEN ${{ secrets.SNYK_KEY_SECRET }}   
+          SNYK_TOKEN: ${{ secrets.SNYK_KEY_SECRET }}  
