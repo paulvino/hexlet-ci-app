@@ -21,4 +21,11 @@ jobs:
       # имя выводится на Github при просмотре сборки
       - name: run tests
         run: npm test # name и run относятся к одной задаче, поэтому дефис ставится только перед name
-
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snuk/actions/node@master
+        env:
+          SNYK_TOKEN ${{ secrets.SNYK_KEY_SECRET }}   
